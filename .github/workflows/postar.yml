@@ -1,0 +1,27 @@
+name: Postar no Blogger
+
+on:
+  push:
+    branches:
+      - main  # O script roda sempre que você envia algo para a branch principal
+
+jobs:
+  postar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar bibliotecas do Google
+        run: pip install google-auth google-api-python-client
+
+      - name: Executar script de postagem
+        env:
+          # Aqui o GitHub "abre o cofre" e entrega o token para o script
+          BLOGGER_TOKEN_BASE64: ${{ secrets.BLOGGER_TOKEN_BASE64 }}
+        run: python seu_script_de_post.py
